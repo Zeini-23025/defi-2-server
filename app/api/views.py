@@ -165,7 +165,6 @@ class BadgeViewSet(viewsets.ModelViewSet):
         """Associe l'utilisateur connecté au badge attribué."""
         serializer.save(utilisateur=self.request.user)
 
-
 def attribuer_badge(utilisateur):
     """Attribuer un badge à un utilisateur en fonction de ses contributions."""
     nombre_contributions = Word.objects.filter(auteur=utilisateur, statut='approved').count()
@@ -174,30 +173,35 @@ def attribuer_badge(utilisateur):
     
     badges_deja_obtenus = utilisateur.badges.values_list('titre', flat=True)
     
-    if nombre_contributions >= 10 and "Contributeur actif" not in badges_deja_obtenus:
-        Badge.objects.create(
-            utilisateur=utilisateur,
-            titre="Contributeur actif",
-            description="Vous avez contribué avec succès à 10 mots validés.",
-        )
-        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Contributeur actif'.")
+    niveaux_badges = [
+        (10, "Contributeur actif", "Vous avez contribué avec succès à 10 mots validés."),
+        (50, "Contributeur avancé", "Vous avez contribué avec succès à 50 mots validés."),
+        (100, "Grand contributeur", "Vous avez contribué avec succès à 100 mots validés."),
+    ]
+    for seuil, titre, description in niveaux_badges:
+        if nombre_contributions >= seuil and titre not in badges_deja_obtenus:
+            Badge.objects.create(utilisateur=utilisateur, titre=titre, description=description)
+            envoyer_notification(utilisateur, f"Félicitations ! Vous avez reçu le badge '{titre}'.")
     
-    if nombre_definitions >= 5 and "Maitre des définitions" not in badges_deja_obtenus:
-        Badge.objects.create(
-            utilisateur=utilisateur,
-            titre="Maitre des définitions",
-            description="Vous avez ajouté 5 définitions approuvées.",
-        )
-        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Maitre des définitions'.")
+    niveaux_definitions = [
+        (5, "Maître des définitions", "Vous avez ajouté 5 définitions approuvées."),
+        (20, "Expert en définitions", "Vous avez ajouté 20 définitions approuvées."),
+        (50, "Lexicographe accompli", "Vous avez ajouté 50 définitions approuvées."),
+    ]
+    for seuil, titre, description in niveaux_definitions:
+        if nombre_definitions >= seuil and titre not in badges_deja_obtenus:
+            Badge.objects.create(utilisateur=utilisateur, titre=titre, description=description)
+            envoyer_notification(utilisateur, f"Félicitations ! Vous avez reçu le badge '{titre}'.")
     
-    if nombre_commentaires >= 20 and "Interagissant engagé" not in badges_deja_obtenus:
-        Badge.objects.create(
-            utilisateur=utilisateur,
-            titre="Interagissant engagé",
-            description="Vous avez publié 20 commentaires sur les mots et définitions.",
-        )
-        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Interagissant engagé'.")
-
+    niveaux_commentaires = [
+        (20, "Interagissant engagé", "Vous avez publié 20 commentaires sur les mots et définitions."),
+        (50, "Débatteur actif", "Vous avez publié 50 commentaires sur les mots et définitions."),
+        (100, "Pilier de la communauté", "Vous avez publié 100 commentaires sur les mots et définitions."),
+    ]
+    for seuil, titre, description in niveaux_commentaires:
+        if nombre_commentaires >= seuil and titre not in badges_deja_obtenus:
+            Badge.objects.create(utilisateur=utilisateur, titre=titre, description=description)
+            envoyer_notification(utilisateur, f"Félicitations ! Vous avez reçu le badge '{titre}'.")
 
 
 def envoyer_notification(utilisateur, message):
