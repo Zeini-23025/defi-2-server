@@ -2,12 +2,17 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import get_user_model
 
 from users.models import User
 from users.serializers import UserSerializer
 from .models import Word, Definition, Comment, History, Notification, Badge, DocumentImport
 from .serializers import WordSerializer, DefinitionSerializer, CommentSerializer, HistorySerializer, NotificationSerializer, BadgeSerializer, DocumentImportSerializer
 from users.permissions import IsAdminOrReadOnly, IsModeratorOrReadOnly, IsAuthenticated
+from rest_framework.permissions import AllowAny
+
+User = get_user_model()
 
 class WordViewSet(viewsets.ModelViewSet):
     """
@@ -196,3 +201,17 @@ class EnrichissementDictionnaireViewSet(viewsets.ViewSet):
 def extraire_mots_inconnus(fichier):
     # Simule la détection des mots inconnus dans un fichier
     return ["mot1", "mot2", "mot3"]
+
+
+class RegisterView(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+    
+    def create(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                'message': 'Inscription réussie',
+                'user': UserSerializer(user).data
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
