@@ -10,8 +10,26 @@ SECRET_KEY = 'django-insecure-boff_-lczz^cx0yh*pqv9vhc*3#m3nq%)g=sq*v^i&3bry&5jm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
+=======
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+]
+
+# CROS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+# ]
+
+
+# CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOW_CREDENTIALS = True  
+
+
+>>>>>>> model_AI
 
 # Application definition
 INSTALLED_APPS = [

@@ -4,7 +4,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     WordViewSet, DefinitionViewSet, CommentViewSet, HistoryViewSet,
     NotificationViewSet, BadgeViewSet, DocumentImportViewSet, UtilisateurViewSet,
+<<<<<<< HEAD
     EnrichissementDictionnaireViewSet, RegisterView
+=======
+    EnrichissementDictionnaireViewSet, RegisterView, generate_word_variants
+>>>>>>> model_AI
 )
 
 router = DefaultRouter()
@@ -31,4 +35,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', include(document_import_urls)),
     path('', include(auth_urls)),
+<<<<<<< HEAD
+=======
+    path('generate-word-variants/<str:word>/', generate_word_variants, name='generate-word-variants'),
+>>>>>>> model_AI
 ]
