@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-=======
 import os
 import requests
 from django.http import JsonResponse
@@ -18,7 +16,6 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
->>>>>>> model_AI
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
@@ -38,24 +35,16 @@ class WordViewSet(viewsets.ModelViewSet):
     """
     queryset = Word.objects.all()
     serializer_class = WordSerializer
-<<<<<<< HEAD
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-=======
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     permission_classes = [AllowAny]
->>>>>>> model_AI
 
     def perform_create(self, serializer):
         """Associe l'utilisateur connecté au mot proposé."""
         serializer.save(auteur=self.request.user, statut="pending")
         attribuer_badge(self.request.user)
 
-<<<<<<< HEAD
-    @action(detail=True, methods=["post"], permission_classes=[IsModeratorOrReadOnly])
-=======
     # @action(detail=True, methods=["post"], permission_classes=[IsModeratorOrReadOnly])
     @action(detail=True, methods=["post"], permission_classes=[AllowAny])
->>>>>>> model_AI
     def approuver(self, request, pk=None):
         """Permet à un modérateur de valider un mot."""
         mot = self.get_object()
@@ -70,12 +59,8 @@ class WordViewSet(viewsets.ModelViewSet):
 
         return Response({"message": "Mot validé avec succès."}, status=status.HTTP_200_OK)
 
-<<<<<<< HEAD
-    @action(detail=True, methods=["post"], permission_classes=[IsModeratorOrReadOnly])
-=======
     @action(detail=True, methods=["post"], permission_classes=[AllowAny])
     # @action(detail=True, methods=["post"], permission_classes=[IsModeratorOrReadOnly])
->>>>>>> model_AI
     def rejeter(self, request, pk=None):
         """Permet de rejeter un mot avec un commentaire explicatif."""
         mot = self.get_object()
@@ -90,12 +75,8 @@ class DefinitionViewSet(viewsets.ModelViewSet):
     """
     queryset = Definition.objects.all()
     serializer_class = DefinitionSerializer
-<<<<<<< HEAD
-    permission_classes = [permissions.IsAuthenticated]
-=======
     # permission_classes = [permissions.IsAuthenticated]
     permission_classes = [AllowAny]
->>>>>>> model_AI
 
     def perform_create(self, serializer):
         """Associe l'utilisateur connecté à la définition proposée."""
@@ -109,12 +90,8 @@ class CommentViewSet(viewsets.ModelViewSet):
     """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-<<<<<<< HEAD
-    permission_classes = [permissions.IsAuthenticated]
-=======
     # permission_classes = [permissions.IsAuthenticated]
     permission_classes = [AllowAny]
->>>>>>> model_AI
 
     def perform_create(self, serializer):
         serializer.save(auteur=self.request.user)
@@ -125,12 +102,8 @@ class DocumentImportViewSet(viewsets.ViewSet):
     """
     API permettant d'importer un document et de détecter les mots non reconnus.
     """
-<<<<<<< HEAD
-    permission_classes = [permissions.IsAuthenticated]
-=======
     # permission_classes = [permissions.IsAuthenticated]
     permission_classes = [AllowAny]
->>>>>>> model_AI
 
     @action(detail=False, methods=["post"])
     def importer_document(self, request):
@@ -156,12 +129,8 @@ class UtilisateurViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-<<<<<<< HEAD
-    permission_classes = [IsAdminOrReadOnly]
-=======
     # permission_classes = [IsAdminOrReadOnly]
     permission_classes = [AllowAny]
->>>>>>> model_AI
 
     @action(detail=True, methods=["get"])
     def contributions(self, request, pk=None):
@@ -218,10 +187,6 @@ class BadgeViewSet(viewsets.ModelViewSet):
         """Associe l'utilisateur connecté au badge attribué."""
         serializer.save(utilisateur=self.request.user)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> model_AI
 def attribuer_badge(utilisateur):
     """Attribuer un badge à un utilisateur en fonction de ses contributions."""
     nombre_contributions = Word.objects.filter(auteur=utilisateur, statut='approved').count()
@@ -230,7 +195,6 @@ def attribuer_badge(utilisateur):
     
     badges_deja_obtenus = utilisateur.badges.values_list('titre', flat=True)
     
-<<<<<<< HEAD
     niveaux_badges = [
         (10, "Contributeur actif", "Vous avez contribué avec succès à 10 mots validés."),
         (50, "Contributeur avancé", "Vous avez contribué avec succès à 50 mots validés."),
@@ -260,32 +224,6 @@ def attribuer_badge(utilisateur):
         if nombre_commentaires >= seuil and titre not in badges_deja_obtenus:
             Badge.objects.create(utilisateur=utilisateur, titre=titre, description=description)
             envoyer_notification(utilisateur, f"Félicitations ! Vous avez reçu le badge '{titre}'.")
-=======
-    if nombre_contributions >= 10 and "Contributeur actif" not in badges_deja_obtenus:
-        Badge.objects.create(
-            utilisateur=utilisateur,
-            titre="Contributeur actif",
-            description="Vous avez contribué avec succès à 10 mots validés.",
-        )
-        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Contributeur actif'.")
-    
-    if nombre_definitions >= 5 and "Maitre des définitions" not in badges_deja_obtenus:
-        Badge.objects.create(
-            utilisateur=utilisateur,
-            titre="Maitre des définitions",
-            description="Vous avez ajouté 5 définitions approuvées.",
-        )
-        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Maitre des définitions'.")
-    
-    if nombre_commentaires >= 20 and "Interagissant engagé" not in badges_deja_obtenus:
-        Badge.objects.create(
-            utilisateur=utilisateur,
-            titre="Interagissant engagé",
-            description="Vous avez publié 20 commentaires sur les mots et définitions.",
-        )
-        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Interagissant engagé'.")
-
->>>>>>> model_AI
 
 
 def envoyer_notification(utilisateur, message):
@@ -297,12 +235,8 @@ class EnrichissementDictionnaireViewSet(viewsets.ViewSet):
     """
     API permettant d'importer un document et de détecter les mots non reconnus.
     """
-<<<<<<< HEAD
-    permission_classes = [permissions.IsAuthenticated]
-=======
     # permission_classes = [permissions.IsAuthenticated]
     permission_classes = [AllowAny]
->>>>>>> model_AI
 
     @action(detail=False, methods=["post"])
     def importer_document(self, request):

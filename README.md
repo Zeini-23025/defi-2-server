@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> model_AI
 🏆 **Nom de l'équipe** : NOT FOUND
 
 # Hassaniya - Dictionnaire Collaboratif
@@ -29,11 +25,7 @@ L'application est conteneurisée avec Docker, facilitant ainsi son déploiement 
 
 Un pipeline CI/CD est mis en place avec GitHub Actions pour automatiser le processus de build et de push de l'image Docker vers Docker Hub.
 
-<<<<<<< HEAD
-👤 **Livrables**
-=======
 📂 **Livrables**
->>>>>>> model_AI
 
 - ✅ Code source du backend et frontend de l'application sur GitHub.
 - ✅ Dockerfile pour la conteneurisation.
@@ -42,11 +34,7 @@ Un pipeline CI/CD est mis en place avec GitHub Actions pour automatiser le proce
 
 🔹 **Dépôts GitHub**
 
-<<<<<<< HEAD
-- 🔗 [Backend](https://github.com/Zeini-23025/defi-2-server)
-=======
 - 🔗 [Backend](https://github.com/Zeini-23025/defi-2-server) 
->>>>>>> model_AI
 - 🔗 [Frontend](https://github.com/Zeini-23025/defi-2-client)
 
 🐳 **Dépôts Docker Hub**
@@ -87,24 +75,11 @@ docker run -p 8000:8000 zeini/docker-server-dev
 ```
 
 #### Méthode 2 : Exécution locale avec Git & Python
-<<<<<<< HEAD
-Cloner le projet avec Git
-
-```bash
-git clone https://github.com/Zeini-23025/defi-2-server.git
-cd defi-2-server
-```
-=======
->>>>>>> model_AI
 
 Installer les dépendances Python :
 
 ```bash
 pip install -r requirements.txt
-<<<<<<< HEAD
-cd app
-=======
->>>>>>> model_AI
 ```
 
 Appliquer les migrations de la base de données :
@@ -151,27 +126,16 @@ cd defi-2-client
 Installer les dépendances :
 
 ```bash
-<<<<<<< HEAD
-cd defi-2-client
-=======
->>>>>>> model_AI
 npm install
 ```
 
 Démarrer le frontend :
 
 ```bash
-<<<<<<< HEAD
-npm run dev
-```
-
-L'application sera accessible à l'adresse [http://localhost:5173](http://localhost:5173).
-=======
 npm start
 ```
 
 L'application sera accessible à l'adresse [http://localhost:3000](http://localhost:3000).
->>>>>>> model_AI
 
 ---
 
@@ -198,15 +162,8 @@ docker run -d -p 3000:3000 --name frontend --link backend zeini/docker-client-de
 Lancer le Backend :
 
 ```bash
-<<<<<<< HEAD
-git clone https://github.com/Zeini-23025/defi-2-server.git
 cd defi-2-server
 pip install -r requirements.txt
-cd app
-=======
-cd defi-2-server
-pip install -r requirements.txt
->>>>>>> model_AI
 python manage.py migrate
 python manage.py runserver
 ```
@@ -214,26 +171,15 @@ python manage.py runserver
 Lancer le Frontend :
 
 ```bash
-<<<<<<< HEAD
-git clone https://github.com/Zeini-23025/defi-2-client.git
-cd defi-2-client/defi-2-client
-npm install
-npm run dev
-=======
 cd ../defi-2-client
 npm install
 npm start
->>>>>>> model_AI
 ```
 
 L'application complète sera accessible aux adresses suivantes :
 
 - Backend : [http://localhost:8000](http://localhost:8000)
-<<<<<<< HEAD
-- Frontend : [http://localhost:5173](http://localhost:5173)
-=======
 - Frontend : [http://localhost:3000](http://localhost:3000)
 
 ---
 
->>>>>>> model_AI
