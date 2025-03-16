@@ -10,7 +10,7 @@ class Word(models.Model):
     ]
 
     mot = models.CharField(max_length=255, unique=True)
-    auteur = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mots")
+    auteur = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mots" ,default=" ")
     statut = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     date_ajout = models.DateTimeField(auto_now_add=True)
     
@@ -19,14 +19,14 @@ class Word(models.Model):
 class Definition(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="definitions")
     texte = models.TextField()
-    auteur = models.ForeignKey(User, on_delete=models.CASCADE)
+    auteur = models.ForeignKey(User, on_delete=models.CASCADE,default=" ")
     date_ajout = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"Définition de {self.word.mot}"
 class Comment(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="commentaires")
-    auteur = models.ForeignKey(User, on_delete=models.CASCADE)
+    auteur = models.ForeignKey(User, on_delete=models.CASCADE , default=" ")
     texte = models.TextField()
     date_ajout = models.DateTimeField(auto_now_add=True)
     

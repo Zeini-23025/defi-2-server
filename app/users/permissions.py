@@ -36,37 +36,62 @@ class IsAdmin(BasePermissionWithToken):
         return self.is_authenticated_with_role(request, ['admin'])
 
 
-class IsReviewer(BasePermissionWithToken):
+class IsModerator(BasePermissionWithToken):
     def has_permission(self, request, view):
-        return self.is_authenticated_with_role(request, ['reviewer'])
+        return self.is_authenticated_with_role(request, ['Moderateur'])
 
-
+class IsAdminOrReadOnly(BasePermissionWithToken):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return self.is_authenticated_with_role(request, ['admin'])
+    
 class IsContributor(BasePermissionWithToken):
     def has_permission(self, request, view):
         return self.is_authenticated_with_role(request, ['contributor'])
 
 
-class IsAdminOrReviewer(BasePermissionWithToken):
+class IsAdminOrModerator(BasePermissionWithToken):
     def has_permission(self, request, view):
-        return self.is_authenticated_with_role(request, ['admin', 'reviewer'])
+        return self.is_authenticated_with_role(request, ['admin', 'Moderator'])
+   
+class IsModeratorOrReadOnly(BasePermissionWithToken):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return self.is_authenticated_with_role(request, ['Moderateur'])
     
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsOwnerOrReadOnly(BasePermissionWithToken):
     def has_permission(self, request, view):
-        return request.user == view.get_object().auteur or request.method in permissions.SAFE_METHODS
+        if request.method in permissions.SAFE_METHODS:
+            return True
+            
+        token = self.get_access_token(request)
+        if token is None:
+            return False
+
+        user = self.get_user_from_token(token)
+        if user is None:
+            return False
+            
+        try:
+            return user == view.get_object().auteur
+        except:
+            return False
 
 class IsAdminOrContributor(BasePermissionWithToken):
     def has_permission(self, request, view):
         return self.is_authenticated_with_role(request, ['admin', 'contributor'])
 
 
-class IsReviewerOrContributor(BasePermissionWithToken):
+class IsModeratorOrContributor(BasePermissionWithToken):
     def has_permission(self, request, view):
-        return self.is_authenticated_with_role(request, ['reviewer', 'contributor'])
+        return self.is_authenticated_with_role(request, ['Moderateur', 'contributor'])
 
 
 class IsAuthenticated(BasePermissionWithToken):
     def has_permission(self, request, view):
-        return self.is_authenticated_with_role(request, ['reviewer', 'contributor', 'admin'])
+        return self.is_authenticated_with_role(request, ['Moderateur', 'contributor', 'admin'])
 
 
 class IsAny(BasePermissionWithToken):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dictionary.models import Word, Definition, Comment, History, Notification, Badge, DocumentImport # type: ignore
+from .models import Word, Definition, Comment, History, Notification, Badge, DocumentImport # type: ignore
 from users.models import User
 
 class WordSerializer(serializers.ModelSerializer):

@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 
-from app.users.models import User
-from app.users.serializers import UserSerializer
+from users.models import User
+from users.serializers import UserSerializer
 from .models import Word, Definition, Comment, History, Notification, Badge, DocumentImport
 from .serializers import WordSerializer, DefinitionSerializer, CommentSerializer, HistorySerializer, NotificationSerializer, BadgeSerializer, DocumentImportSerializer
 from users.permissions import IsAdminOrReadOnly, IsModeratorOrReadOnly, IsAuthenticated
