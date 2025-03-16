@@ -25,6 +25,7 @@ class WordViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Associe l'utilisateur connecté au mot proposé."""
         serializer.save(auteur=self.request.user, statut="pending")
+        attribuer_badge(self.request.user)
 
     @action(detail=True, methods=["post"], permission_classes=[IsModeratorOrReadOnly])
     def approuver(self, request, pk=None):
@@ -61,6 +62,7 @@ class DefinitionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Associe l'utilisateur connecté à la définition proposée."""
         serializer.save(auteur=self.request.user)
+        attribuer_badge(self.request.user)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -73,6 +75,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(auteur=self.request.user)
+        attribuer_badge(self.request.user)
 
 
 class DocumentImportViewSet(viewsets.ViewSet):
@@ -164,19 +167,42 @@ class BadgeViewSet(viewsets.ModelViewSet):
 
 
 def attribuer_badge(utilisateur):
-    """Attribuer un badge à un utilisateur pour sa contribution."""
-    if utilisateur.contributions.count() >= 10:  # Exemple : Attribuer un badge après 10 contributions
+    """Attribuer un badge à un utilisateur en fonction de ses contributions."""
+    nombre_contributions = Word.objects.filter(auteur=utilisateur, statut='approved').count()
+    nombre_definitions = Definition.objects.filter(auteur=utilisateur).count()
+    nombre_commentaires = Comment.objects.filter(auteur=utilisateur).count()
+    
+    badges_deja_obtenus = utilisateur.badges.values_list('titre', flat=True)
+    
+    if nombre_contributions >= 10 and "Contributeur actif" not in badges_deja_obtenus:
         Badge.objects.create(
             utilisateur=utilisateur,
             titre="Contributeur actif",
-            description="Vous avez contribué avec succès à 10 mots.",
+            description="Vous avez contribué avec succès à 10 mots validés.",
         )
+        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Contributeur actif'.")
+    
+    if nombre_definitions >= 5 and "Maitre des définitions" not in badges_deja_obtenus:
+        Badge.objects.create(
+            utilisateur=utilisateur,
+            titre="Maitre des définitions",
+            description="Vous avez ajouté 5 définitions approuvées.",
+        )
+        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Maitre des définitions'.")
+    
+    if nombre_commentaires >= 20 and "Interagissant engagé" not in badges_deja_obtenus:
+        Badge.objects.create(
+            utilisateur=utilisateur,
+            titre="Interagissant engagé",
+            description="Vous avez publié 20 commentaires sur les mots et définitions.",
+        )
+        envoyer_notification(utilisateur, "Félicitations ! Vous avez reçu le badge 'Interagissant engagé'.")
+
 
 
 def envoyer_notification(utilisateur, message):
     """Envoyer une notification à un utilisateur."""
     Notification.objects.create(utilisateur=utilisateur, message=message)
-
 
 
 class EnrichissementDictionnaireViewSet(viewsets.ViewSet):
