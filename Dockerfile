@@ -1,17 +1,17 @@
-# Utiliser une image officielle de Python
+# Utiliser l'image officielle de Python comme image de base
 FROM python:3.10
 
-# Définir le répertoire de travail dans le conteneur
-WORKDIR /app
+# Définir le répertoire de travail à /app
+WORKDIR /app/app
 
-# Copier tout le contenu du répertoire local dans le répertoire /app dans le conteneur
+# Copier tous les fichiers du projet dans le répertoire /app
 COPY . /app/
 
-# Installer les dépendances
+# Installer les dépendances à partir de requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Exposer le port 8000
+# Exposer le port 8000 pour que l'application soit accessible
 EXPOSE 8000
 
-# Exécuter les migrations et collecter les fichiers statiques avant de lancer le serveur
-CMD ["sh", "-c", "python /app/app/manage.py migrate && python /app/app/manage.py collectstatic --noinput && gunicorn -b 0.0.0.0:8000 app.wsgi:application"]
+# Commande d'exécution du conteneur
+CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn -b 0.0.0.0:8000 app.wsgi:application"]

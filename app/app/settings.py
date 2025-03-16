@@ -1,9 +1,8 @@
 from pathlib import Path
 from datetime import timedelta
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-boff_-lczz^cx0yh*pqv9vhc*3#m3nq%)g=sq*v^i&3bry&5jm'
@@ -12,11 +11,9 @@ SECRET_KEY = 'django-insecure-boff_-lczz^cx0yh*pqv9vhc*3#m3nq%)g=sq*v^i&3bry&5jm
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS = True 
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +37,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',\
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -63,10 +60,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -74,10 +68,7 @@ DATABASES = {
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -95,13 +86,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'users.auth.CustomJWTAuthentication', 
+        'users.auth.CustomJWTAuthentication',
     ),
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -110,34 +101,31 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'users.User'
 
 # email 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
-EMAIL_HOST = 'smtp.gmail.com'  
-EMAIL_PORT = 587 
-EMAIL_USE_TLS = True  
-EMAIL_HOST_USER = 'ahmedouvallmohamedlemine@gmail.com' 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ahmedouvallmohamedlemine@gmail.com'
 EMAIL_HOST_PASSWORD = 'hwil nhto dbwd myew'
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER 
-
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
+# Static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+
+application = get_wsgi_application()
