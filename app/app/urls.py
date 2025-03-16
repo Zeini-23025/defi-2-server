@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('users/',include('users.urls')),
+    path('api/', include('api.urls')),
 ]
 
 if settings.DEBUG:
