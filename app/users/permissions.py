@@ -49,7 +49,10 @@ class IsContributor(BasePermissionWithToken):
 class IsAdminOrReviewer(BasePermissionWithToken):
     def has_permission(self, request, view):
         return self.is_authenticated_with_role(request, ['admin', 'reviewer'])
-
+    
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user == view.get_object().auteur or request.method in permissions.SAFE_METHODS
 
 class IsAdminOrContributor(BasePermissionWithToken):
     def has_permission(self, request, view):

@@ -1,32 +1,55 @@
 from rest_framework import serializers
-from .models import Mot, Definition, Commentaire, Historique, Notification, Badge
+from dictionary.models import Word, Definition, Comment, History, Notification, Badge, DocumentImport # type: ignore
+from users.models import User
 
-class MotSerializer(serializers.ModelSerializer):
+class WordSerializer(serializers.ModelSerializer):
+    auteur = serializers.StringRelatedField()  # Affiche le nom de l’auteur
+
     class Meta:
-        model = Mot
-        fields = ['id', 'texte', 'auteur', 'statut']
+        model = Word
+        fields = ['id', 'mot', 'auteur', 'statut', 'date_ajout']
 
 class DefinitionSerializer(serializers.ModelSerializer):
+    word = serializers.StringRelatedField()
+    auteur = serializers.StringRelatedField()
+
     class Meta:
         model = Definition
-        fields = ['id', 'mot', 'definition_texte', 'auteur']
+        fields = ['id', 'word', 'texte', 'auteur', 'date_ajout']
 
-class CommentaireSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Commentaire
-        fields = ['id', 'mot', 'commentaire_texte', 'moderateur']
+class CommentSerializer(serializers.ModelSerializer):
+    word = serializers.StringRelatedField()
+    auteur = serializers.StringRelatedField()
 
-class HistoriqueSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Historique
-        fields = ['id', 'mot', 'action', 'effectue_par', 'horodatage']
+        model = Comment
+        fields = ['id', 'word', 'texte', 'auteur', 'date_ajout']
+
+class HistorySerializer(serializers.ModelSerializer):
+    word = serializers.StringRelatedField()
+    utilisateur = serializers.StringRelatedField(allow_null=True)
+
+    class Meta:
+        model = History
+        fields = ['id', 'word', 'utilisateur', 'action', 'date_action']
 
 class NotificationSerializer(serializers.ModelSerializer):
+    utilisateur = serializers.StringRelatedField()
+
     class Meta:
         model = Notification
-        fields = ['id', 'utilisateur', 'message', 'est_lu', 'horodatage']
+        fields = ['id', 'utilisateur', 'message', 'lu', 'date_envoi']
 
 class BadgeSerializer(serializers.ModelSerializer):
+    utilisateur = serializers.StringRelatedField()
+
     class Meta:
         model = Badge
-        fields = ['id', 'utilisateur', 'nom_badge', 'attribue_le']
+        fields = ['id', 'utilisateur', 'titre', 'description', 'date_obtention']
+
+class DocumentImportSerializer(serializers.ModelSerializer):
+    utilisateur = serializers.StringRelatedField()
+
+    class Meta:
+        model = DocumentImport
+        fields = ['id', 'utilisateur', 'fichier', 'date_import', 'traite']
