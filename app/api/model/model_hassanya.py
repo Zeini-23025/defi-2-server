@@ -3,7 +3,7 @@ import requests
 from dotenv import load_dotenv
 
 load_dotenv()
-TOGETHER_API_KEY = os.getenv("31a2be173d436083abbfcc901f28d537b6116b70b964da5c8c7598a8e5c2225a")
+TOGETHER_API_KEY = os.getenv("")
 
 # Fonction pour générer des variantes d'un mot en hassaniya
 def generate_words(word):
@@ -11,7 +11,7 @@ def generate_words(word):
     url = "https://api.together.xyz/v1/completions"
     
     headers = {
-        "Authorization": f"Bearer {'31a2be173d436083abbfcc901f28d537b6116b70b964da5c8c7598a8e5c2225a'}",
+        "Authorization": f"Bearer {''}",
         "Content-Type": "application/json"
     }
 

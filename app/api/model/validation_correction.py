@@ -1,6 +1,6 @@
 import openai
 
-openai.api_key = "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"
+openai.api_key = ""  # Remplace par ta clé API
 
 def generate_word_variants(word):
     response = openai.Completion.create(
